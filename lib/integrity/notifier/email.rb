@@ -55,5 +55,7 @@ module Integrity
           }
         end
     end
+
+    register Email
   end
 end
