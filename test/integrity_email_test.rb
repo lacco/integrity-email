@@ -1,5 +1,4 @@
 require "test/unit"
-require 'rubygems'
 require "rumbster"
 require "message_observers"
 require "integrity/notifier/test"
@@ -66,6 +65,8 @@ class IntegrityEmailTest < Test::Unit::TestCase
     Integrity::Notifier::Email.new(successful, config.dup).deliver!
     Integrity::Notifier::Email.new(failed,     config).deliver!
 
+    assert_equal "net_smtp", Sinatra::Mailer.delivery_method
+
     mail = @mail_observer.messages.first
 
     assert_equal ["you@example.org"], mail.destinations
@@ -75,19 +76,18 @@ class IntegrityEmailTest < Test::Unit::TestCase
     assert mail.body.include?(successful.author.name)
     assert mail.body.include?(successful.output)
   end
-  
+
   def test_it_configures_email_notification_with_sendmail
-    sendmail_path = `which sendmail` || "/usr/sbin/sendmail"
-    sendmail_path.strip!
+    sendmail_path = "/usr/sbin/sendmail"
 
     config = { "sendmail" => sendmail_path,
                "to"   => "sendmail@example.org",
                "from" => "me@example.org"  }
     successful = commit(:successful)
-    
+
     Integrity::Notifier::Email.new(successful, config)
-    assert Sinatra::Mailer.delivery_method == :sendmail
-    assert Sinatra::Mailer.config[:sendmail_path] == sendmail_path
+
+    assert_equal :sendmail, Sinatra::Mailer.delivery_method
+    assert_equal sendmail_path, Sinatra::Mailer.config[:sendmail_path]
   end
-  
 end

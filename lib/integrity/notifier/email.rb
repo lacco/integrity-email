@@ -38,26 +38,31 @@ module Integrity
 
       private
         def configure_mailer
-          if !@config["sendmail"].blank?
-            Sinatra::Mailer.delivery_method = :sendmail
-            Sinatra::Mailer.config = {:sendmail_path => @config['sendmail']}
-          else
-            user = @config["user"] || ""
-            pass = @config["pass"] || ""
-            user = nil if user.empty?
-            pass = nil if pass.empty?
+          return configure_sendmail unless @config["sendmail"].blank?
+          configure_smtp
+        end
 
-            Sinatra::Mailer.delivery_method = "net_smtp"
+        def configure_smtp
+          user = @config["user"] || ""
+          pass = @config["pass"] || ""
+          user = nil if user.empty?
+          pass = nil if pass.empty?
 
-            Sinatra::Mailer.config = {
-              :host => @config["host"],
-              :port => @config["port"],
-              :user => user,
-              :pass => pass,
-              :auth => @config["auth"],
-              :domain => @config["domain"]
-            }
-          end
+          Sinatra::Mailer.delivery_method = "net_smtp"
+
+          Sinatra::Mailer.config = {
+            :host => @config["host"],
+            :port => @config["port"],
+            :user => user,
+            :pass => pass,
+            :auth => @config["auth"],
+            :domain => @config["domain"]
+          }
+        end
+
+        def configure_sendmail
+          Sinatra::Mailer.delivery_method = :sendmail
+          Sinatra::Mailer.config = {:sendmail_path => @config['sendmail']}
         end
     end
 
