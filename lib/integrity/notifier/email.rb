@@ -5,6 +5,11 @@ module Integrity
   class Notifier
     class Email < Notifier::Base
       attr_reader :to, :from
+      
+      def self.notify_of_build(build, config)
+        # Only send email when build is failed
+        build.failed? ? super : true
+      end
 
       def self.to_haml
         File.read(File.dirname(__FILE__) + "/config.haml")
