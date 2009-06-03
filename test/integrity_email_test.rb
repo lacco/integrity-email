@@ -40,17 +40,17 @@ class IntegrityEmailTest < Test::Unit::TestCase
   end
 
   def test_configuration_form
-    assert_form_have_tag "h3", :content => "SMTP Server Configuration"
+    assert form_have_tag?("h3", :content => "SMTP Server Configuration")
 
-    assert_form_have_option "to",    "foo@example.org"
-    assert_form_have_option "from",  "bar@example.org"
-    assert_form_have_option "host",  "foobarhost.biz"
-    assert_form_have_option "user",  "foobaruser"
-    assert_form_have_option "pass",  "secret"
-    assert_form_have_option "auth",  "plain"
-    assert_form_have_option "pass",  "secret"
-    assert_form_have_option "domain","localhost"
-    assert_form_have_option "sendmail","/usr/sbin/sendmail"
+    assert provides_option? "to",    "foo@example.org"
+    assert provides_option? "from",  "bar@example.org"
+    assert provides_option? "host",  "foobarhost.biz"
+    assert provides_option? "user",  "foobaruser"
+    assert provides_option? "pass",  "secret"
+    assert provides_option? "auth",  "plain"
+    assert provides_option? "pass",  "secret"
+    assert provides_option? "domain","localhost"
+    assert provides_option? "sendmail","/usr/sbin/sendmail"
   end
 
   def test_it_sends_email_notification
