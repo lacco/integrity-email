@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
     s.add_development_dependency "rumbster"
   end
 
-  s.rubyforge_project = "integrity"
+  #s.rubyforge_project = "integrity"
 
   s.files             = %w[
 README.markdown
