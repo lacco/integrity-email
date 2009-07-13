@@ -8,8 +8,8 @@ module Integrity
       
       def self.notify_of_build(build, config)
         # Only send email when build is failed
-        last_commit = commit.project.commits.first(:order => [:created_at.desc], :id.not => commit.id)
-        (commit.failed? || (last_commit && last_commit.failed?)) ? super : true
+        last_commit = build.commit.project.commits.first(:order => [:created_at.desc], :id.not => build.commit.id)
+        (build.commit.failed? || (last_commit && last_commit.failed?)) ? super : true
       end
 
       def self.to_haml
